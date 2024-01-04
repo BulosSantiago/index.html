@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Negocios</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    border-radius: 8px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-group input[type="number"],
+.input-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.result {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #e7e7e7;
+    border-radius: 4px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+    </style>
+</head>
+<body>
+ 
+    <div class="container">
+        <div class="input-group">
+            <label for="tipoCambio">Tipo de Cambio (soles por dólar):</label>
+            <input type="number" id="tipoCambio" placeholder="Ingrese tipo de cambio">
+        </div>
+        <div class="input-group">
+            <label for="ventasTotales">Ventas Totales (soles):</label>
+            <input type="number" id="ventasTotales" placeholder="Ingrese ventas totales">
+        </div>
+        <div class="input-group">
+            <label for="margenGanancia">Margen de Ganancia (%):</label>
+            <input type="number" id="margenGanancia" placeholder="Ingrese margen de ganancia">
+        </div>
+
+        <div class="input-group">
+            <label for="tipoAlquiler">Tipo de Alquiler:</label>
+            <select id="tipoAlquiler">
+                <option value="porcentaje">Porcentaje</option>
+                <option value="fijo">Monto Fijo</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="monedaAlquiler">Moneda de Alquiler:</label>
+            <select id="monedaAlquiler">
+                <option value="soles">Soles</option>
+                <option value="dolares">Dólares</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="alquiler">Alquiler:</label>
+            <input type="number" id="alquiler" placeholder="Ingrese alquiler o porcentaje">
+        </div>
+
+        <div class="input-group">
+            <label for="gastosDolares">Gastos Extras (dólares):</label>
+            <input type="number" id="gastosDolares" placeholder="Ingrese gastos extras en dólares">
+        </div>
+        <div class="input-group">
+            <label for="numVendedoras">Número de Vendedoras:</label>
+            <input type="number" id="numVendedoras" placeholder="Ingrese número de vendedoras">
+        </div>
+
+<div class="input-group">
+        <label for="comisionJefa">Comisión Jefa de Tienda (soles):</label>
+        <input type="number" id="comisionJefa" disabled>
+    </div>
+    <div class="input-group">
+        <label for="comisionAsistente">Comisión Asistente (soles):</label>
+        <input type="number" id="comisionAsistente" disabled>
+    </div>
+    <div class="input-group">
+        <label for="comisionOtras">Comisión Otras Vendedoras (soles):</label>
+        <input type="number" id="comisionOtras" disabled>
+    </div>
+
+    <div class="input-group">
+        <label for="sueldoJefa">Sueldo Jefa de Tienda (soles):</label>
+        <input type="number" id="sueldoJefa" disabled>
+    </div>
+    <div class="input-group">
+        <label for="sueldoAsistente">Sueldo Asistente (soles):</label>
+        <input type="number" id="sueldoAsistente" disabled>
+    </div>
+    <div class="input-group">
+        <label for="sueldoOtras">Sueldo Otras Vendedoras (soles):</label>
+        <input type="number" id="sueldoOtras" disabled>
+    </div>
+    <div class="input-group">
+        <label for="costoTotalAlquiler">Costo Total de Alquiler (soles):</label>
+        <input type="number" id="costoTotalAlquiler" disabled>
+    </div>
+    
+
+       
+        <button onclick="calcularResultados()">Calcular</button>
+
+        <div class="result" id="resultado">
+            <!-- Aquí se mostrarán los resultados -->
+        </div>
+    </div>
+
+    <script>
+        function calcularResultados() {
+    var tipoCambio = parseFloat(document.getElementById('tipoCambio').value);
+    var ventasTotales = parseFloat(document.getElementById('ventasTotales').value);
+    var margenGanancia = parseFloat(document.getElementById('margenGanancia').value);
+    var tipoAlquiler = document.getElementById('tipoAlquiler').value;
+    var monedaAlquiler = document.getElementById('monedaAlquiler').value;
+    var alquiler = parseFloat(document.getElementById('alquiler').value);
+    var gastosDolares = parseFloat(document.getElementById('gastosDolares').value);
+    var numVendedoras = parseInt(document.getElementById('numVendedoras').value);
+
+    var sueldoMinimo = 1070;
+    var factorPlanilla = 1.35;
+
+    var comisionJefa = ventasTotales * 0.01;
+    var sueldoJefa = (sueldoMinimo + comisionJefa) * factorPlanilla;
+
+    var comisionAsistente = ventasTotales * 0.008;
+    var sueldoAsistente = (sueldoMinimo + comisionAsistente) * factorPlanilla;
+
+    var comisionOtras = 0;
+    var sueldoOtras = sueldoMinimo * factorPlanilla; // Sueldo base para otras vendedoras
+    if (numVendedoras > 2) {
+        comisionOtras = (numVendedoras - 2) * (ventasTotales * 0.005);
+        sueldoOtras = (sueldoMinimo + comisionOtras / (numVendedoras - 2)) * factorPlanilla;
+    }
+    
+    var sueldoTotalVendedoras = sueldoJefa + sueldoAsistente + sueldoOtras * Math.max(numVendedoras - 2, 0);
+
+    var utilidad = ventasTotales * (margenGanancia / 100);
+    
+
+    var costoAlquiler;
+    if (tipoAlquiler === "porcentaje") {
+        costoAlquiler = ventasTotales * (alquiler / 100);
+    } else {
+        costoAlquiler = alquiler; // Monto fijo
+    }
+
+    if (monedaAlquiler === "dolares") {
+        costoAlquiler *= tipoCambio;
+    }
+
+    var gastosExtrasSoles = gastosDolares * tipoCambio;
+    var costoTotalAlquiler = costoAlquiler + gastosExtrasSoles;
+
+    var utilidadFinal = utilidad - costoTotalAlquiler  - sueldoTotalVendedoras;
+    var porcentajeUtilidadFinalSobreVentas = (utilidadFinal / ventasTotales) * 100;
+
+
+    // Calcular punto de equilibrio
+    var costosFijosTotales = costoTotalAlquiler + sueldoTotalVendedoras;
+    var puntoEquilibrio = costosFijosTotales / margenGanancia;
+
+
+    var resultadoHTML = "<h3>Resultados</h3>";
+    resultadoHTML += "<p>Utilidad Neta/Bruta: " + utilidad.toFixed(2) + " soles</p>";
+    
+    resultadoHTML += "<p>Costo Total de Alquiler: " + costoTotalAlquiler.toFixed(2) + " soles</p>";
+    resultadoHTML += "<p>Sueldo Total de Vendedoras: " + sueldoTotalVendedoras.toFixed(2) + " soles</p>";
+    resultadoHTML += "<p><strong>Utilidad Final: " + utilidadFinal.toFixed(2) + " soles</strong></p>";
+
+    resultadoHTML += "<p>Porcentaje de Utilidad Final sobre Ventas: " + porcentajeUtilidadFinalSobreVentas.toFixed(2) + "%</p>";
+    resultadoHTML += "<p>Punto de Equilibrio (soles): " + puntoEquilibrio.toFixed(2) + "</p>";
+
+    document.getElementById('sueldoJefa').value = sueldoJefa.toFixed(2);
+    document.getElementById('sueldoAsistente').value = sueldoAsistente.toFixed(2);
+    document.getElementById('sueldoOtras').value = sueldoOtras.toFixed(2);
+
+    document.getElementById('comisionJefa').value = comisionJefa.toFixed(2);
+    document.getElementById('comisionAsistente').value = comisionAsistente.toFixed(2);
+    document.getElementById('comisionOtras').value = comisionOtras.toFixed(2);
+    document.getElementById('costoTotalAlquiler').value = costoTotalAlquiler.toFixed(2);
+    document.getElementById('resultado').innerHTML = resultadoHTML;
+}
+
+    </script>
+</body>
+</html>
